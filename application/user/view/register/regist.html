@@ -1,0 +1,54 @@
+﻿{include file='public/header'}
+ 
+<body>
+	<div class="main">
+				 <!-----start-main---->
+				<!--  <div class="inset">
+				 	<div class="social-icons">
+		    			 <div class="span"><a href="#"><img src="/__STATIC__/user/images/fb.png" alt=""/><i>Connect with Facebook </i><div class="clear"></div></a></div>	
+    					 <div class="span1"><a href="#"><img src="/__STATIC__/user/images/t-bird.png" alt=""/><i>Connect with Twitter</i><div class="clear"></div></a></div>
+    					 <div class="clear"></div>
+					</div>
+				 </div>	
+				 <h2>Or sign up with</h2> -->
+				 <form action="{:url('Register/register')}" method="post">
+							<div class="lable">
+		                     	<input type="text" class="text" name="name" placeholder="用户名" value=""  id="active">
+
+		                     	
+		                    </div>
+
+		                    <div class="clear"> </div>
+		                    <div class="lable">
+		                    	<input type="text" class="text" value="" name="mobile" placeholder="手机号">
+		                    </div>
+		                    <div class="clear"> </div>
+		                    <div class="lable-2">
+		                    <input type="text" class="text" value="" name="email" placeholder="邮箱地址" >
+		                     <input type="password" class="text" name="password" value="" placeholder="密码">
+		                     <input type="password" class="text" name="repassword" placeholder="确认密码">
+							</div>
+							<div class="lable" width=30><input type="text" name="verify" placeholder="验证码"><img style="line-height: 50px;margin-left: 10px" id="verify" src="{:captcha_src()}" alt="captcha" onclick="this.src='{:captcha_src()}?rnd='+Math.random()" /><span style="color:white;">点击图片刷新</span></div>
+							<div class="clear"> </div>
+							 <h3>创建此账户代表您同意我们的 <span><a href="#">条款 & 协议</a> <span></h3>
+								 <div class="submit">
+									<input type="submit"  value="创建账户" >
+								</div>
+									<div class="clear"> </div>
+							 </form>
+		<!-----//end-main---->
+		</div>
+		 <!-----start-copyright---->
+   					{include file='public/footer'}
+   					<script type="text/javascript">
+   						function flush(){
+
+   							var img = $('#verify').attr('src');
+   							img = img+'?rnd='+Math.random();
+   							//alert(img);
+   						}
+   					</script>
+				<!-----//end-copyright---->
+	 
+</body>
+</html>

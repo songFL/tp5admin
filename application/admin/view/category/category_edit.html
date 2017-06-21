@@ -1,0 +1,87 @@
+<!--包含头部文件-->
+{include file="public/header" /}
+<body>
+<div class="page-container">
+	<form class="form form-horizontal form-o2o-add" id="form-o2o-add" method="post" action="{:url('Category/update',['id'=>$cate->id])}">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>表情包分类名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$cate->name}" placeholder="" id="name" name="name">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>一级分类：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box">
+				<select name="fpid" class="select" id="fpid">
+					<option value="0">--</option>
+					{foreach $cates as $cat}
+					
+					<option value="{$cat->id}" {if $cate->fpid eq $cat->id}selected{/if}>{$cat->name}</option>
+					{/foreach}
+					
+					
+				</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>二级分类：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<span class="select-box" id="scate-box">
+				<select name="spid" class="select" id="spid">
+					<option value="0">--</option>
+					{foreach $scate as $scat}
+					
+					<option value="{$scat->id}" {if $cate->spid eq $scat->id}selected{/if}>{$scat->name}</option>
+					{/foreach}
+				</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>排序：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$cate->listorder}" placeholder="" id="" name="listorder">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<button  type="submit" class="btn btn-primary radius" ><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+<!--包含头部文件-->
+{include file="public/footer" /}
+
+<!--分类联动-->
+<script type="text/javascript">
+	
+		$('#fpid').change(function(){
+			
+			var fpid = $('#fpid').val();
+			var param = {'fpid':fpid};
+			var html ="";
+			//alert(fpid);
+			$.post("{:url('Category/scate')}",param,function(data){
+				$('#spid').remove();
+				html+='<select name="spid" class="select" id="spid">';
+				html+='<option value="">--</option>';
+				if(fpid!=false){
+				$.each(data,function(i,n){
+					
+					html+="<option value='"+n.id+"'>"+n.name+"</option>";			
+					
+				});
+			}
+				html+='</select>';
+				//console.log(html);
+				$('#scate-box').append(html);
+			});
+		});
+	
+</script>

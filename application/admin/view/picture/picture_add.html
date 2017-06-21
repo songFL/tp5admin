@@ -1,0 +1,75 @@
+{include file='public/header'}
+<title>新增图片</title>
+
+</head>
+<body>
+<div class="page-container">
+  <form class="form form-horizontal" id="form-article-add" method='post' action="{:url('picture/save')}" enctype="multipart/form-data">
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>图片名称：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+        <input type="text" class="input-text" value="" placeholder="" id="" name="name">
+      </div>
+    </div>
+ 
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>分类栏目：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+        <span class="select-box">
+        <select name="categoryid" class="select">
+        {volist name="cates" id="cate"}
+          <option value="{$cate->id}">{$cate->name}</option>
+        
+         {/volist} 
+        </select>
+        </span>
+      </div>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2">排序值：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+        <input type="text" class="input-text" value="0" placeholder="" id="" name="listorder">
+      </div>
+    </div>
+    
+
+ 
+    <div class="row cl">
+      <label class="form-label col-xs-4 col-sm-2">关键词：</label>
+      <div class="formControls col-xs-8 col-sm-9">
+        <input type="text" class="input-text" value="" placeholder="" id="" name="keywords">
+      </div>
+    </div>
+
+    <div class="row cl">
+     
+      <label  class="form-label col-xs-4 col-sm-2 "> 点击+添加图片:</label>
+          
+      
+      <div id="inputfiles">
+
+      </div>
+    
+    </div>
+
+
+    <div class="row cl">
+      <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+        <button  class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存提交</button>
+        <!-- <button onClick="article_save();" class="btn btn-secondary radius" type="button"><i class="Hui-iconfont">&#xe632;</i> 保存草稿</button> -->
+        <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+      </div>
+    </div>
+  </form>
+</div>
+</div>
+
+{include file="public/footer"}
+<script type="text/javascript" src="/__STATIC__/admin/h5upload/js/jquery.min.js"></script>
+<script type="text/javascript" src="/__STATIC__/admin/h5upload/js/jquery.h5upload.js"></script>
+  <script>
+        $("#inputfiles").h5upload();
+    </script>
+
+</body>
+</html>   

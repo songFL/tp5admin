@@ -1,0 +1,91 @@
+{include file='public/header'}
+<title>分类管理</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 分类管理 <span class="c-gray en">&gt;</span> 分类列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" name="mdel" onclick="" class="btn btn-danger radius btn-checkdel"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="system_category_add('添加资讯','{:url("Category/create")}')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> <span class="r">共有数据：<strong>{$count}</strong> 条</span> </div>
+	<div class="mt-20">
+	<form method="post" action="{:url('Category/delAll')}" id="showtable" >
+    	<input type="hidden" name="method" />
+		<table class="table table-border table-bordered table-hover table-bg table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="25"><input type="checkbox" name="id[]" value=""></th>
+					<th width="20">ID</th>
+					<th width="30">排序</th>
+					<th width="80">栏目级别</th>
+					<th width="80">分类名称</th>
+					<th width="50">状态</th>
+					<th width="80">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			{foreach $cates as $cate}
+				<tr class="text-c" id="cate_{$cate->id}">
+					<td><input type="checkbox" name="id[]" value="{$cate->id}"></td>
+					<td>{$cate->id}</td>
+					<td>{$cate->listorder}</td>
+					<td>{$cate->level}</td>
+					<td class="text-l">{$cate->name}</td>
+					<td class="td-status">
+						{switch name="$cate->status"}
+
+					    {case value="1"}<span class="label label-success radius">已启用</span>{/case}
+					    {case value="0"}<span class="label label-defaunt radius">已停用</span>{/case}
+					    {default /}<span class="label label-defaunt radius">待审核</span>
+						{/switch}
+					</td>
+					<td class="f-14 td-manage">
+					{switch name="$cate->status"}
+					{case value="1"}
+					<a style="text-decoration:none" onClick="category_stop(this,'{$cate->id}')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>{/case}
+					{case value="0"}
+					<a style="text-decoration:none" onClick="category_start(this,'{$cate->id}')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>{/case}
+					{default /}
+					{/switch}
+					<a title="编辑" href="javascript:;" onclick="system_category_edit('栏目编辑','{:url("Category/edit",array("id"=>$cate->id))}','1','700','480')" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="system_category_del(this,'{$cate->id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>
+{include file='public/footer'}
+<script type="text/javascript" src="/__STATIC__/admin/category/js/common.js"></script>
+<script type="text/javascript">
+
+
+	function checkselt(name, form) {
+	si = 0;
+	var ss = $("input[name='" + name + "']");
+	for (var i = 0; i < ss.length; i++) {
+		if (ss[i].checked) {
+			si++
+		}
+	}
+	if (si == 0) {
+		layer.alert('请选择您要操作的记录!', 8);
+		return false;
+	}
+	if ($("select[name='dooperate']").val() == 0) {
+		layer.alert('请选择您要进行的操作！', 8);
+		return false;
+	}
+	layer.confirm('请注意提交后操作就不能再恢复,您确定提交吗？', function () {
+		$(form).submit();
+	});
+}
+
+$(function(){
+	  $('.btn-checkdel').on('click',function(e){
+            e.preventDefault();
+            $('input[name=method]').val($(this).attr('name'));
+            checkselt('id[]','#showtable');
+        });
+});
+</script>
+</body>
+</html>

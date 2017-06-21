@@ -1,0 +1,119 @@
+﻿{include file='public/header'}
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+
+<!-- <link href="http://fonts.googleapis.com/css?family=Electrolize" rel="stylesheet" type="text/css"> -->
+<link href="/__STATIC__/admin/waterfall/common.css" rel="stylesheet" type="text/css">
+
+<script src="/__STATIC__/admin/waterfall/jquery-1.8.2.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/__STATIC__/admin/waterfall/common.js"></script>
+
+<title>图片列表</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 图片管理 <span class="c-gray en">&gt;</span> 图片列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+<form action="{:url('picture/picture_list')}" method='post'>
+	<div class="text-c"> 日期范围：
+		<input type="text" onfocus="WdatePicker()" name="stime" id="logmin" class="input-text " style="width:120px; " value={if isset($where['stime'])} "{$where['stime']}" {/if}>
+		-
+		<input type="text" onfocus="WdatePicker()" name="etime" id="logmax" class="input-text" style="width:120px;" value= {if isset($where['etime'])} "{$where['etime']}" {/if}>
+		<input type="text" name="name"    placeholder=" 图片名称" style="width:250px" class="input-text" value= {if isset($where['name'])} "{$where['name']}" {/if}>
+		<button name="" id="" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜图片</button>
+	</div>
+	</form>
+	
+	<div class="cl pd-5 bg-1 bk-gray mt-20" id="checka"> <span class="l"><a href="javascript:;" onclick="" class="btn btn-danger radius btn-checkdel" name="mdel"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a class="btn btn-primary radius" onclick="picture_add('添加图片','{:url("Picture/picture_add")}')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加图片</a></span>&nbsp;&nbsp;<input type="checkbox" class="checkall" id="all"><span>全选</span> <span class="r">共有数据：<strong>{$count}</strong> 条</span> </div>
+	<div id="waterfall">
+	<form method="post" action="{:url('picture/delAll')}" id="showtable" >
+    	<input type="hidden" name="method" />
+	{foreach $pictures as $pv}
+	<div class="picList" id="pic_{$pv->id}">
+		
+		<div class="picThumbnail" >
+			<a href="#"><img src="/uploads/{$pv->pic_path}"></a>
+		</div>
+		<div class="picDescription">
+
+			<p>{$pv->name}</p>
+			<p id='pitem'><input class="l" type="checkbox" name="id[]" value="{$pv->id}"><a href="{:url('picture/edit',array('id'=>$pv->id))}"><i class="Hui-iconfont">&#xe6df;</i>修改</a><a class="r" href="javascript:;" onclick="picture_del(this,'{$pv->id}')"><i class="Hui-iconfont">&#xe6e2;</i>删除</a></p>
+		</div>
+	</div>
+	{/foreach}
+	</form>
+	</div>
+	
+	
+</div>
+
+<div class="h5upload_clear"></div>
+<div style="margin-top:100px;margin-right: 20px;" class="r">
+	{$pictures->render()}
+</div>
+{include file='public/footer'}
+
+<script type="text/javascript">
+$("#all").click(function(){
+   
+    if(this.checked){   
+        $("input[name='id[]']").attr("checked", true);  
+    }else{   
+		$("input[name='id[]']").attr("checked", false);
+    }   
+});
+
+	
+
+	function checkselt(name, form) {
+	si = 0;
+	var ss = $("input[name='" + name + "']");
+	for (var i = 0; i < ss.length; i++) {
+		if (ss[i].checked) {
+			si++
+		}
+	}
+	if (si == 0) {
+		layer.alert('请选择您要操作的记录!', 8);
+		return false;
+	}
+	if ($("select[name='dooperate']").val() == 0) {
+		layer.alert('请选择您要进行的操作！', 8);
+		return false;
+	}
+	layer.confirm('请注意提交后操作就不能再恢复,您确定提交吗？', function () {
+		$(form).submit();
+	});
+}
+
+$(function(){
+	  $('.btn-checkdel').on('click',function(e){
+            e.preventDefault();
+            $('input[name=method]').val($(this).attr('name'));
+            checkselt('id[]','#showtable');
+        });
+});
+
+//删除图片
+function picture_del(obj,id){
+	var param = {'id':id};
+	layer.confirm('确认要删除吗？',function(index){
+		$.post('{:url("Picture/del")}',param,function(msgs){
+			
+			if(msgs.msg==1){
+				
+				$('#pic_'+id).remove();
+				layer.msg('已删除!',{icon:1,time:1000});
+			}else{
+				
+				layer.msg('删除失败!',{icon:2,time:1000});
+			}
+		},"json");
+		
+	});
+}
+</script>
+
+</body>
+</html>
